@@ -7,38 +7,43 @@ import java.util.List;
 
 public class FileHandling {
 
-    public void debugPrint(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr){
+    private int[] nmp;
+    private String mode;
+    private Block2D[] blocks;
+    private char[] char_int_corr;
+    
+    public void debugPrint(){
         System.out.println("");
-        System.out.println("n:_" + nmp[0] + "_");
-        System.out.println("m:_" + nmp[1] + "_");
-        System.out.println("p:_" + nmp[2] + "_");
-        System.out.println("mode:_" + mode + "_");
-        for (int i = 0; i  < nmp[2]; i++){
-            System.out.println("int: " + (i+1) + " char: " + char_int_corr[i]);
+        System.out.println("n:_" + this.nmp[0] + "_");
+        System.out.println("m:_" + this.nmp[1] + "_");
+        System.out.println("p:_" + this.nmp[2] + "_");
+        System.out.println("mode:_" + this.mode + "_");
+        for (int i = 0; i  < this.nmp[2]; i++){
+            System.out.println("int: " + (i+1) + " char: " + this.char_int_corr[i]);
             blocks[i].printBlock2D();
         }
     }
 
-    public void handle(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr){
+    public void handle(String path){
 
-        try (FileInputStream fis = new FileInputStream("test/input_1/input.txt")) {
+        try (FileInputStream fis = new FileInputStream(path)) {
 
             // variables
 
             // input number variables ahh
             // store variable n, m, and p in an array of integer
-            nmp = new int[3];
-            for (int i = 0; i < 3; i++){nmp[i] = 0;}
+            this.nmp = new int[3];
+            for (int i = 0; i < 3; i++){this.nmp[i] = 0;}
             int nmp_itr = 0;
             boolean nmp_read = false;
 
             // mode selection ahh variables
-            mode = "";
+            this.mode = "";
             boolean mode_read = false;
 
             // blocks input ahh variables
             List<List<Integer>> buffer2D = null;
-            blocks = null;
+            this.blocks = null;
             char unique = ' ';
             int[] yx = new int[2];
             yx[0] = 0;
@@ -46,7 +51,7 @@ public class FileHandling {
 
             // array of characters, index is character's correlated int
             // empty declaration, declare in the loop
-            char_int_corr = null;
+            this.char_int_corr = null;
             int idx_cic = 0;
 
             // file handling ahh
@@ -64,7 +69,7 @@ public class FileHandling {
                 if (!nmp_read){
                     if(data >= 48 && data <= 57){
                         while(data != 32 && data != 10){
-                            nmp[nmp_itr] = nmp[nmp_itr]*10 + (data - 48);
+                            this.nmp[nmp_itr] = this.nmp[nmp_itr]*10 + (data - 48);
                             // debug print
                             // System.out.print(data + " ");
                             data = fis.read();
@@ -80,12 +85,12 @@ public class FileHandling {
                         nmp_read = true;
 
                         // initialize input blocks and character correlation 
-                        char_int_corr = new char[nmp[2]];
-                        if (nmp[2] == 0) {nmp[2] = 1;}
+                        this.char_int_corr = new char[this.nmp[2]];
+                        if (this.nmp[2] == 0) {this.nmp[2] = 1;}
 
-                        blocks = new Block2D[nmp[2]];
-                        for(int i = 0; i < nmp[2]; i++){
-                            blocks[i] = new Block2D();
+                        this.blocks = new Block2D[this.nmp[2]];
+                        for(int i = 0; i < this.nmp[2]; i++){
+                            this.blocks[i] = new Block2D();
                         } 
                     }
                 }
@@ -108,11 +113,11 @@ public class FileHandling {
 
                         if (buffer2D != null){
                             buffer2D.remove(yx[0]);
-                            blocks[idx_cic-1].setBlock2D(buffer2D);
+                            this.blocks[idx_cic-1].setBlock2D(buffer2D);
                         }
 
                         // update char_int_corr
-                        char_int_corr[idx_cic] = unique;
+                        this.char_int_corr[idx_cic] = unique;
                         idx_cic+=1;
 
                         yx[0] = 0;
@@ -144,10 +149,10 @@ public class FileHandling {
                 }
             }
 
-            blocks[idx_cic-1].setBlock2D(buffer2D);
+            this.blocks[idx_cic-1].setBlock2D(buffer2D);
 
             // debug print
-            // debugPrint(nmp, mode, board, blocks, char_int_corr);
+            // debugPrint();
 
         }
 
