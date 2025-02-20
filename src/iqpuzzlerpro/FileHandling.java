@@ -20,7 +20,7 @@ public class FileHandling {
         System.out.println("mode:_" + this.mode + "_");
         for (int i = 0; i  < this.nmp[2]; i++){
             System.out.println("int: " + (i+1) + " char: " + this.char_int_corr[i]);
-            blocks[i].printBlock2D();
+            this.blocks[i].printBlock2D();
         }
     }
 
