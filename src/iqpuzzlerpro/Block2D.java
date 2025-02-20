@@ -151,11 +151,5 @@ public class Block2D {
         this.block = copyBlock;
 
     }
-
-    // Check Fit
-    public void isFit(Board2D board, int left_corner){
-
-    }
-
     
 }
