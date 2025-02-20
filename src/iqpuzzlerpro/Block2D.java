@@ -48,7 +48,7 @@ public class Block2D {
             }
         }
 
-
+        // re-define the matrix data type
         for(int i = 0; i < block.size(); i++){
             for(int j = 0; j < block.get(i).size(); j++){
                 if(block.get(i).get(j) != 0){
@@ -85,13 +85,70 @@ public class Block2D {
         System.out.println(this.block);
     }
     
-    // Rotate block
-    public void rotateBlock(){
-        
+    // Rotate block counterclockwise
+    public void rotateCTR(){
+        // mat[i][j] to mat[n-j-1][i]
+        // n is this.n_col
+        List<List<Integer>> copyBlock = new ArrayList<>();
+
+        // Initialize empty ArrayList
+        for(int i = 0; i < this.n_col; i++){
+            for(int j = 0; j < this.n_row;j++){
+                copyBlock.add(new ArrayList<>());
+            }
+        }
+
+        // Rotate the block
+        for(int i = 0; i < this.n_row; i++){
+            for(int j = 0; j < this.n_col; j++){
+                copyBlock.get(this.n_col-j-1).set(this.block.get(i).get(j),i);  
+            }
+        }
+        this.block = copyBlock;
+
+        // swap row and col
+        int swap = this.n_col;
+        this.n_col = this.n_row;
+        this.n_row = swap;
+
     }
 
     // Flip block
-    public void flipBlock(){
+    // Flip on the y-axis
+    public void flipH(){
+
+        List<List<Integer>> copyBlock = new ArrayList<>();
+
+        for (List<Integer> row : this.block) {
+            copyBlock.add(new ArrayList<>(row));
+        }
+
+        for (int i = 0; i < this.n_row; i++){
+            for (int j = 0; j < this.n_col/2; j++){
+                copyBlock.get(i).set(j, this.block.get(i).get(this.n_col - 1 - j));
+                copyBlock.get(i).set(this.n_col - 1 - j, this.block.get(i).get(j));
+            }
+        }
+
+        this.block = copyBlock;
+        
+    }
+
+    public void flipV(){
+
+        List<List<Integer>> copyBlock = new ArrayList<>();
+
+        for (List<Integer> row : this.block) {
+            copyBlock.add(new ArrayList<>(row));
+        }
+
+        for (int i = 0; i < this.n_row/2; i++){
+            List<Integer> temp = copyBlock.get(i);
+            copyBlock.set(i, copyBlock.get(this.n_row - 1 - i));
+            copyBlock.set(this.n_row - 1 - i, temp);
+        }
+
+        this.block = copyBlock;
 
     }
 
