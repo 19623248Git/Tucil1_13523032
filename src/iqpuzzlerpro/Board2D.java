@@ -5,7 +5,7 @@ public class Board2D {
     
     // Define board as a contiguous linear array of width * height
     // Reflects the true definition of list in memory
-    private List<Integer> board;
+    private List<List<Integer>> board;
     private int width;
     private int height;
 
@@ -15,7 +15,7 @@ public class Board2D {
     }
 
     // Constructor with a given board
-    public Board2D(List<Integer> board){
+    public Board2D(List<List<Integer>> board){
         this.board = board;
     }
 
@@ -23,7 +23,7 @@ public class Board2D {
     Setter with defined board
     DO NOT USE THIS!! NOT SUPPORTED
     */
-    public void setBoard2D(List<Integer> board){
+    public void setBoard2D(List<List<Integer>> board){
         this.board = board;
     }
 
@@ -39,10 +39,14 @@ public class Board2D {
         this.width = width;
         this.height = height;
         
-        this.board = new ArrayList<>(width * height);
-        for (int i = 0; i < width * height; i++) {
-            this.board.add(0);
+        this.board = new ArrayList<>(height);
+        for(int i = 0; i < height; i++){
+            this.board.add(new ArrayList<>());
+            for(int j = 0; j < width; j++){
+                this.board.get(i).add(0);
+            }
         }
+
     }
 
     // Set Board2D element at certain 2D index
@@ -60,9 +64,7 @@ public class Board2D {
             );
         }
 
-        int index = row*this.width + col;
-
-        this.board.set(index, value);
+        this.board.get(row).set(col,value);
 
     }
 
@@ -77,7 +79,7 @@ public class Board2D {
     }
 
     // Getter
-    public List<Integer> getBoard2D(){
+    public List<List<Integer>> getBoard2D(){
         return this.board;
     }
 
@@ -96,9 +98,7 @@ public class Board2D {
             );
         }
 
-        int index = row*this.width + col;
-
-        return this.board.get(index);
+        return this.board.get(row).get(col);
 
     }
 
