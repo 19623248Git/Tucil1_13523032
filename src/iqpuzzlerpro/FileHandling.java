@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FileHandling {
 
-    public void debugPrint(int[] nmp, String mode, Board2D board, Block2D[] blocks, char[] char_int_corr){
+    public void debugPrint(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr){
         System.out.println("");
         System.out.println("n:_" + nmp[0] + "_");
         System.out.println("m:_" + nmp[1] + "_");
@@ -19,7 +19,7 @@ public class FileHandling {
         }
     }
 
-    public void handle(int[] nmp, String mode, Board2D board, Block2D[] blocks, char[] char_int_corr){
+    public void handle(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr){
 
         try (FileInputStream fis = new FileInputStream("test/input_1/input.txt")) {
 
@@ -48,9 +48,6 @@ public class FileHandling {
             // empty declaration, declare in the loop
             char_int_corr = null;
             int idx_cic = 0;
-
-            // board ahh object
-            board = new Board2D();
 
             // file handling ahh
             int data;
@@ -84,7 +81,6 @@ public class FileHandling {
 
                         // initialize input blocks and character correlation 
                         char_int_corr = new char[nmp[2]];
-                        board.setBoard2D(nmp[1], nmp[0]);
                         if (nmp[2] == 0) {nmp[2] = 1;}
 
                         blocks = new Block2D[nmp[2]];
@@ -151,6 +147,7 @@ public class FileHandling {
             blocks[idx_cic-1].setBlock2D(buffer2D);
 
             // debug print
+            // debugPrint(nmp, mode, board, blocks, char_int_corr);
 
         }
 

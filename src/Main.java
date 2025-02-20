@@ -20,6 +20,7 @@ class Main {
 
         // board ahh object
         Board2D board = new Board2D();
+        board.setBoard2D(nmp[1], nmp[0]);
 
         // blocks input ahh variables
         Block2D[] blocks = null;
@@ -29,7 +30,8 @@ class Main {
         char[] char_int_corr = null;
 
         FileHandling FileHandler = new FileHandling();
-        FileHandler.handle(nmp, mode, board, blocks, char_int_corr);
+        FileHandler.handle(nmp, mode, blocks, char_int_corr);
+        // FileHandler.debugPrint(nmp, mode, board, blocks, char_int_corr);
 
     } 
 }
