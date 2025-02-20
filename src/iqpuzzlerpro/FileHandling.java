@@ -12,6 +12,7 @@ public class FileHandling {
     private Block2D[] blocks;
     private char[] char_int_corr;
     
+    // debug printing for file handling
     public void debugPrint(){
         System.out.println("");
         System.out.println("n:_" + this.nmp[0] + "_");
@@ -24,6 +25,7 @@ public class FileHandling {
         }
     }
 
+    // file handling
     public void handle(String path){
 
         try (FileInputStream fis = new FileInputStream(path)) {
@@ -160,5 +162,39 @@ public class FileHandling {
             System.err.println("Oopsie input file not found :(");
             // e.printStackTrace();
         }
+    }
+
+    // Getter
+    public int[] getNmp(){
+        return this.nmp;
+    }
+
+    public String getMode(){
+        return this.mode;
+    }
+
+    public Block2D[] getBlocks(){
+        return this.blocks;
+    }
+
+    public char[] getCharIntCorr(){
+        return this.char_int_corr;
+    }
+
+    // Setter
+    public void setNmp(int[] nmp){
+        this.nmp = nmp;
+    }
+
+    public void setMode(String mode){
+        this.mode = mode;
+    }
+
+    public void setBlocks(Block2D[] blocks){
+        this.blocks = blocks;
+    }
+
+    public void setCharIntCorr(char[] char_int_corr){
+        this.char_int_corr = char_int_corr;
     }
 }
