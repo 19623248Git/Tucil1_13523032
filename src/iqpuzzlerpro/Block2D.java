@@ -93,15 +93,16 @@ public class Block2D {
 
         // Initialize empty ArrayList
         for(int i = 0; i < this.n_col; i++){
+            copyBlock.add(new ArrayList<>());
             for(int j = 0; j < this.n_row;j++){
-                copyBlock.add(new ArrayList<>());
+                copyBlock.get(i).add(j,0);
             }
         }
 
         // Rotate the block
         for(int i = 0; i < this.n_row; i++){
             for(int j = 0; j < this.n_col; j++){
-                copyBlock.get(this.n_col-j-1).set(this.block.get(i).get(j),i);  
+                copyBlock.get(this.n_col-j-1).set(i,this.block.get(i).get(j));  
             }
         }
         this.block = copyBlock;
