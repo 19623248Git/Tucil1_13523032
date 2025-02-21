@@ -8,6 +8,10 @@ public class Board2D {
     private List<List<Integer>> board;
     private int width;
     private int height;
+    private int pivotRow = 0;
+    private int pivotCol = 0;
+    private int iter;
+
 
     // Default constructor
     public Board2D(){
@@ -116,6 +120,75 @@ public class Board2D {
     public void printBoard2D(){
         System.out.println(this.board);
     }
-    
+
+    // Check if block is fit in board
+    public boolean isFit(Block2D block, int pivotRow, int pivotCol){
+        
+        if(pivotRow >= block.getRow() || pivotCol >= block.getCol() || pivotRow < 0 || pivotCol < 0){
+            return false;
+        }
+        
+        for (int i = 0; i < block.getRow(); i++){
+            for (int j = 0; j < block.getCol(); j++){
+                if(this.board.get(i+pivotRow).get(j+pivotCol)!=0){
+                    return false;
+                }
+                if(i+pivotRow >= block.getRow() || j+pivotCol >= block.getCol() || i+pivotRow < 0 || j+pivotCol < 0){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Place block in board
+    public void placeBlock(Block2D block, int pivotRow, int pivotCol){
+        for (int i = 0; i < block.getRow(); i++){
+            for (int j = 0; j < block.getCol(); j++){
+                int element = block.getBlock2D().get(i).get(j);
+                if (element!=0){
+                    this.board.get(i+pivotRow).set(j+pivotCol,element);
+                }
+            }
+        }
+    }
+
+    // Remove block in board
+    public void removeBlock(Block2D block, int pivotRow, int pivotCol){
+        for (int i = 0; i < block.getRow(); i++){
+            for (int j = 0; j < block.getCol(); j++){
+                this.board.get(i+pivotRow).set(j+pivotCol,0);
+            }
+        }
+    }
+
+    // Find Top Left Empty Corner
+    public void findCorner(){
+        for(int j = 0; j <  this.width; j++){
+            for(int i = 0; i < this.height; i++){
+                if(this.board.get(i).get(j) == 0){
+                    this.pivotRow = i;
+                    this.pivotCol = j;
+                    break;
+                }
+            }
+        } 
+    }
+
+    // Check if board is full
+    public boolean isFull(List<List<Integer>> board){
+        for(int j = 0; j <  this.width; j++){
+            for(int i = 0; i < this.height; i++){
+                if(board.get(i).get(j) == 0){
+                    return false;
+                }
+            }
+        } 
+        return true;
+    }
+
+    public void solve(Block2D[] block){
+        //todo: implement
+    }
 
 }
