@@ -10,7 +10,7 @@ public class Board2D {
     private int height;
     private int pivotRow = 0;
     private int pivotCol = 0;
-    private int iter;
+    private int iter = 0;
 
 
     // Default constructor
@@ -86,6 +86,10 @@ public class Board2D {
     public List<List<Integer>> getBoard2D(){
         return this.board;
     }
+    
+    public int getIter(){
+        return this.iter;
+    }
 
     // Get Board2D element at certain 2D index
     public int getElmt(int row, int col){
@@ -121,19 +125,30 @@ public class Board2D {
         System.out.println(this.board);
     }
 
+    public void prettierPrintBoard2D(){
+        System.out.println("---------------------------------");
+        for(int i = 0; i < this.height; i++){
+            System.out.println(board.get(i));
+        }
+        System.out.println("---------------------------------");
+    }
+
     // Check if block is fit in board
     public boolean isFit(Block2D block, int pivotRow, int pivotCol){
         
-        if(pivotRow >= block.getRow() || pivotCol >= block.getCol() || pivotRow < 0 || pivotCol < 0){
+        if (pivotRow < 0 || pivotCol < 0 || pivotRow + block.getRow() > getHeight() || pivotCol + block.getCol() > getWidth()) {
             return false;
-        }
+        }        
         
         for (int i = 0; i < block.getRow(); i++){
             for (int j = 0; j < block.getCol(); j++){
-                if(this.board.get(i+pivotRow).get(j+pivotCol)!=0){
+                if(i+pivotRow >= getHeight() || j+pivotCol >= getWidth() || i+pivotRow < 0 || j+pivotCol < 0){
+                    // System.out.println("( " + (i+pivotRow) + " , " + (j+pivotCol) + " )");
+                    // System.out.println("fail #3");
                     return false;
                 }
-                if(i+pivotRow >= block.getRow() || j+pivotCol >= block.getCol() || i+pivotRow < 0 || j+pivotCol < 0){
+                if(this.board.get(i+pivotRow).get(j+pivotCol)!=0 && block.getBlock2D().get(i).get(j)!=0){
+                    // System.out.println("fail #2");
                     return false;
                 }
             }
@@ -157,7 +172,9 @@ public class Board2D {
     public void removeBlock(Block2D block, int pivotRow, int pivotCol){
         for (int i = 0; i < block.getRow(); i++){
             for (int j = 0; j < block.getCol(); j++){
-                this.board.get(i+pivotRow).set(j+pivotCol,0);
+                if(block.getBlock2D().get(i).get(j)!=0){
+                    this.board.get(i+pivotRow).set(j+pivotCol,0);
+                }
             }
         }
     }
@@ -175,11 +192,12 @@ public class Board2D {
         } 
     }
 
+
     // Check if board is full
-    public boolean isFull(List<List<Integer>> board){
+    public boolean isFull(){
         for(int j = 0; j <  this.width; j++){
             for(int i = 0; i < this.height; i++){
-                if(board.get(i).get(j) == 0){
+                if(this.board.get(i).get(j) == 0){
                     return false;
                 }
             }
@@ -187,8 +205,70 @@ public class Board2D {
         return true;
     }
 
-    public void solve(Block2D[] block){
-        //todo: implement
+    public boolean solve(Block2D[] block, boolean[] used, int blockCount) {
+    
+        // Solved condition
+        if (blockCount == block.length && isFull()) {
+            return true;
+        }
+    
+        if (blockCount > block.length) {
+            return false;
+        }
+    
+        for (int blockIndex = 0; blockIndex < block.length; blockIndex++) {
+            if (used[blockIndex]) continue; // Skip used blocks
+    
+            Block2D[] block_orientations = new Block2D[8];
+    
+            for (int k = 0; k < 8; k++) {
+                block_orientations[k] = new Block2D();
+            }
+    
+            for (int k = 0; k < 8; k++) {
+                if (k < 4) {
+                    block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+                    block[blockIndex].rotateCTR();
+                } else if (k == 4) {
+                    block[blockIndex].flipH();
+                    block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+                } else {
+                    block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+                    block[blockIndex].rotateCTR();
+                }
+            }
+    
+            for (int i = 0; i < this.height; i++) {
+                for (int j = 0; j < this.width; j++) {
+                    for (int k = 0; k < block_orientations.length; k++) {
+    
+                        this.iter += 1;
+    
+                        if (isFit(block_orientations[k], i, j)) { 
+                            
+                            // System.out.println("Before: ");
+                            // prettierPrintBoard2D();
+                            // System.out.println("pivotRow: " + i + ", pivotCol: " + j);
+
+                            placeBlock(block_orientations[k], i, j);
+                            // System.out.println("After: ");
+                            // prettierPrintBoard2D();
+                            used[blockIndex] = true; // Mark block as used
+    
+                            if (solve(block, used, blockCount + 1)) {
+                                return true;
+                            }
+    
+                            removeBlock(block_orientations[k], i, j);
+                            used[blockIndex] = false; // Unmark block after backtracking
+                        }
+                    }
+                }
+            }
+        }
+    
+        return false;
     }
+    
 
 }
