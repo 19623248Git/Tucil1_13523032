@@ -133,6 +133,49 @@ public class Board2D {
         System.out.println("---------------------------------");
     }
 
+    public void printCharCorr(char[] char_int_corr) {
+        String[] colors = {
+            "\u001B[38;5;196m", // Red
+            "\u001B[38;5;220m", // Yellow
+            "\u001B[38;5;51m",  // Cyan
+            "\u001B[38;5;214m", // Gold
+            "\u001B[38;5;57m",  // Dark Purple
+            "\u001B[38;5;46m",  // Green
+            "\u001B[38;5;201m", // Pink
+            "\u001B[38;5;39m",  // Light Blue
+            "\u001B[38;5;172m", // Dark Orange
+            "\u001B[38;5;27m",  // Deep Blue
+            "\u001B[38;5;129m", // Magenta
+            "\u001B[38;5;178m", // Light Yellow
+            "\u001B[38;5;88m",  // Brownish Red
+            "\u001B[38;5;207m", // Hot Pink
+            "\u001B[38;5;44m",  // Deep Turquoise
+            "\u001B[38;5;136m", // Olive
+            "\u001B[38;5;93m",  // Purple
+            "\u001B[38;5;83m",  // Teal
+            "\u001B[38;5;160m", // Dark Red
+            "\u001B[38;5;94m",  // Dark Gold
+            "\u001B[38;5;219m", // Light Pink
+            "\u001B[38;5;140m", // Lavender
+            "\u001B[38;5;202m", // Orange
+            "\u001B[38;5;165m", // Violet
+            "\u001B[38;5;21m",  // Blue
+            "\u001B[38;5;255m"  // White
+        };
+    
+        String reset = "\u001B[0m"; // Reset color
+    
+        for (int i = 0; i < this.height; i++) {
+            for (int j = 0; j < this.width; j++) {
+                int boardValue = board.get(i).get(j) - 1;
+                String color = colors[boardValue % colors.length]; // Cycle through 26 colors
+                System.out.print(color + char_int_corr[boardValue] + reset);
+            }
+            System.out.println();
+        }
+    }
+    
+
     // Check if block is fit in board
     public boolean isFit(Block2D block, int pivotRow, int pivotCol){
 
