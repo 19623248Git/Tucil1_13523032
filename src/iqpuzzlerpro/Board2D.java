@@ -135,8 +135,12 @@ public class Board2D {
 
     // Check if block is fit in board
     public boolean isFit(Block2D block, int pivotRow, int pivotCol){
+
+        // block.printBlock2D();
         
         if (pivotRow < 0 || pivotCol < 0 || pivotRow + block.getRow() > getHeight() || pivotCol + block.getCol() > getWidth()) {
+            // System.out.println("( " + (pivotRow) + " , " + (pivotCol) + " )");
+            // System.out.println("fail #1");
             return false;
         }        
         
@@ -144,11 +148,12 @@ public class Board2D {
             for (int j = 0; j < block.getCol(); j++){
                 if(i+pivotRow >= getHeight() || j+pivotCol >= getWidth() || i+pivotRow < 0 || j+pivotCol < 0){
                     // System.out.println("( " + (i+pivotRow) + " , " + (j+pivotCol) + " )");
-                    // System.out.println("fail #3");
+                    // System.out.println("fail #2");
                     return false;
                 }
                 if(this.board.get(i+pivotRow).get(j+pivotCol)!=0 && block.getBlock2D().get(i).get(j)!=0){
-                    // System.out.println("fail #2");
+                    // System.out.println("( " + (i+pivotRow) + " , " + (j+pivotCol) + " )");
+                    // System.out.println("fail #3");
                     return false;
                 }
             }
@@ -181,12 +186,13 @@ public class Board2D {
 
     // Find Top Left Empty Corner
     public void findCorner(){
-        for(int j = 0; j <  this.width; j++){
-            for(int i = 0; i < this.height; i++){
+        for(int i = 0; i <  this.height; i++){
+            for(int j = 0; j < this.width; j++){
+                // this.iter+=1;
                 if(this.board.get(i).get(j) == 0){
                     this.pivotRow = i;
                     this.pivotCol = j;
-                    break;
+                    return;
                 }
             }
         } 
@@ -206,6 +212,8 @@ public class Board2D {
     }
 
     public boolean solve(Block2D[] block, boolean[] used, int blockCount) {
+
+        // prettierPrintBoard2D();
     
         // Solved condition
         if (blockCount == block.length && isFull()) {
@@ -225,21 +233,32 @@ public class Board2D {
                 block_orientations[k] = new Block2D();
             }
     
-            for (int k = 0; k < 8; k++) {
-                if (k < 4) {
-                    block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
-                    block[blockIndex].rotateCTR();
-                } else if (k == 4) {
-                    block[blockIndex].flipH();
-                    block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
-                } else {
-                    block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
-                    block[blockIndex].rotateCTR();
-                }
+            // for (int k = 0; k < 8; k++) {
+            //     if (k < 4) {
+            //         block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+            //         block[blockIndex].rotateCTR();
+            //     } else if (k == 4) {
+            //         block[blockIndex].flipH();
+            //         block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+            //     } else {
+            //         block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+            //         block[blockIndex].rotateCTR();
+            //     }
+            // }
+
+            for (int k = 0; k < 8; k+=2) {
+                block_orientations[k].setBlock2D(block[blockIndex].getBlock2D());
+                Block2D temp = new Block2D();
+                temp.setBlock2D(block[blockIndex].getBlock2D());
+                temp.flipH();
+                block_orientations[k+1].setBlock2D(temp.getBlock2D());
+                block[blockIndex].rotateCTR();
             }
+
+            findCorner();
     
-            for (int i = 0; i < this.height; i++) {
-                for (int j = 0; j < this.width; j++) {
+            for (int i = this.pivotRow; i < this.height; i++) {
+                for (int j = this.pivotCol; j < this.width; j++) {
                     for (int k = 0; k < block_orientations.length; k++) {
     
                         this.iter += 1;
