@@ -5,9 +5,6 @@ import iqpuzzlerpro.FileHandling;
 class Main {
 
     public static void main(String[] args) {
-    
-        String currentDir = System.getProperty("user.dir");
-        System.out.println("Current directory: " + currentDir);
 
         // variables
 
@@ -30,14 +27,8 @@ class Main {
 
         // file handling
         FileHandling FileHandler = new FileHandling();
-        // FileHandler.handle("test/input_1/input.txt");
-        // FileHandler.handle("test/input_2/input.txt");
-        // FileHandler.handle("test/input_3/input.txt");
-        // FileHandler.handle("test/input_4/input.txt");
-        // FileHandler.handle("test/input_5/input.txt");
-        // FileHandler.handle("test/input_6/input.txt");
-        // FileHandler.handle("test/input_7/input.txt");
-        FileHandler.handle("test/input_8/input.txt");
+        FileHandler.inputPath();
+        FileHandler.handle();
 
         nmp = FileHandler.getNmp();
         mode = FileHandler.getMode();

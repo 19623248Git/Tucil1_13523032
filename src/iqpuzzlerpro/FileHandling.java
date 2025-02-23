@@ -1,12 +1,15 @@
 package iqpuzzlerpro;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class FileHandling {
 
+    private String path;
     private int[] nmp;
     private String mode;
     private Block2D[] blocks;
@@ -25,10 +28,30 @@ public class FileHandling {
         }
     }
 
-    // file handling
-    public void handle(String path){
+    public void inputPath(){
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("Current directory: " + currentDir);
+        String expectedDir = currentDir + "/test/[dir_name]/input.txt";
+        System.out.println("\nExpected directory: " + expectedDir);
+        
+        try (Scanner myObj = new Scanner(System.in)) {
+            System.out.print("Input dir_name: ");
+            String dir_name = myObj.nextLine();
+            this.path = currentDir + "/test/" + dir_name + "/input.txt";
+            File f = new File(this.path);
+            if (f.exists()){
+                System.out.println("Input Directory Exists!");
+            }
+            else{
+                System.out.println(this.path + "Doesn't Directory Exists!");
+            }
+        }
+    }
 
-        try (FileInputStream fis = new FileInputStream(path)) {
+    // file handling
+    public void handle(){
+
+        try (FileInputStream fis = new FileInputStream(this.path)) {
 
             // variables
 
@@ -167,12 +190,12 @@ public class FileHandling {
             this.blocks[idx_cic-1].setBlock2D(buffer2D);
 
             // debug print
-            debugPrint();
+            // debugPrint();
 
         }
 
         catch (IOException e) {
-            System.err.println("Oopsie input file not found :(");
+            System.err.println("Oopsie input file not found in directory: " + this.path + " :(");
             // e.printStackTrace();
         }
     }
