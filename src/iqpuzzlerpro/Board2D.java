@@ -16,6 +16,7 @@ public class Board2D {
     private int iter = 0;
     private String mode;
     private double  elapsedTime = 0;
+    private String outPath;
 
     // Default constructor
     public Board2D(){
@@ -196,7 +197,7 @@ public class Board2D {
 
     // File output
     public void outFile(char[] char_int_corr){
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.outPath))) {
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
                     int boardValue = board.get(i).get(j) - 1;
@@ -375,7 +376,9 @@ public class Board2D {
     }
 
     // fit and solve
-    public void fitSolve(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr){
+    public void fitSolve(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr, String path){
+
+        this.outPath = path + "/output.txt";
 
         fit(nmp, mode);
         

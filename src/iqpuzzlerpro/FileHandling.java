@@ -37,7 +37,7 @@ public class FileHandling {
         try (Scanner myObj = new Scanner(System.in)) {
             System.out.print("Input dir_name: ");
             String dir_name = myObj.nextLine();
-            this.path = currentDir + "/test/" + dir_name + "/input.txt";
+            this.path = currentDir + "/test/" + dir_name;
             File f = new File(this.path);
             if (f.exists()){
                 System.out.println("Input Directory Exists!");
@@ -48,10 +48,15 @@ public class FileHandling {
         }
     }
 
+    // Get path
+    public String getPath(){
+        return this.path;
+    }
+
     // file handling
     public void handle(){
 
-        try (FileInputStream fis = new FileInputStream(this.path)) {
+        try (FileInputStream fis = new FileInputStream(this.path + "/input.txt")) {
 
             // variables
 

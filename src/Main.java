@@ -25,6 +25,9 @@ class Main {
         // empty declaration, declare in the loop
         char[] char_int_corr = null;
 
+        // string path
+        String path;
+
         // file handling
         FileHandling FileHandler = new FileHandling();
         FileHandler.inputPath();
@@ -34,7 +37,8 @@ class Main {
         mode = FileHandler.getMode();
         blocks = FileHandler.getBlocks();
         char_int_corr = FileHandler.getCharIntCorr();
+        path = FileHandler.getPath();
 
-        board.fitSolve(nmp, mode, blocks, char_int_corr);
+        board.fitSolve(nmp, mode, blocks, char_int_corr, path);
     }
 }
