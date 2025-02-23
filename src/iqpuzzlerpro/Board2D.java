@@ -1,4 +1,7 @@
 package iqpuzzlerpro;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Board2D {
@@ -11,7 +14,7 @@ public class Board2D {
     private int pivotRow = 0;
     private int pivotCol = 0;
     private int iter = 0;
-
+    private String mode;
 
     // Default constructor
     public Board2D(){
@@ -120,6 +123,21 @@ public class Board2D {
         return(this.width);
     }
 
+    // Fit attributes
+    public void fit(int[] nmp, String mode){
+        
+        setBoard2D(nmp[1], nmp[0]);
+        
+        if(mode.toLowerCase().equals("custom") || mode.toLowerCase().equals("custom")){
+            System.out.println("Mode has not been implemented, converting to default mode");
+        }
+        else if(!mode.toLowerCase().equals("default")){
+            System.out.println("Mode type not found, converting to default mode!");
+        }
+        mode = "default";
+        this.mode = mode;
+    }
+
     // Print-er
     public void printBoard2D(){
         System.out.println(this.board);
@@ -172,6 +190,26 @@ public class Board2D {
                 System.out.print(color + char_int_corr[boardValue] + reset);
             }
             System.out.println();
+        }
+    }
+
+    // File output
+    public void outFile(char[] char_int_corr){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"))) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    int boardValue = board.get(i).get(j) - 1;
+                    writer.write(char_int_corr[boardValue]); // Write character without color codes
+                }
+                writer.newLine();
+            }
+            writer.newLine();
+            writer.write("Number of iterations: " + getIter());
+            System.out.println("Output file has been created!");
+        } 
+        catch (IOException e) {
+            System.err.println("Error creating the file!");
+            // e.printStackTrace();
         }
     }
     
@@ -254,6 +292,7 @@ public class Board2D {
         return true;
     }
 
+    // Solve the board with collection of block
     public boolean solve(Block2D[] block, boolean[] used, int blockCount) {
 
         // prettierPrintBoard2D();
@@ -330,6 +369,32 @@ public class Board2D {
         }
     
         return false;
+    }
+
+    // fit and solve
+    public void fitSolve(int[] nmp, String mode, Block2D[] blocks, char[] char_int_corr){
+
+        fit(nmp, mode);
+        
+        boolean used[] = new boolean[blocks.length];
+        for(int i = 0; i < blocks.length; i++){
+            used[i] = false;
+        }
+
+        long startTime = System.nanoTime();
+        long endTime = 0;
+        if(solve(blocks, used, 0)){
+            endTime = System.nanoTime();
+            System.out.println("Solution found!");
+            printCharCorr(char_int_corr);
+            long elapsedTime = endTime - startTime;
+            System.out.println("Number of iterations: " + getIter()); 
+            System.out.println("Elapsed time: " + elapsedTime / 1_000_000_000.0+ " seconds");
+            outFile(char_int_corr);
+        }
+        else{
+            System.out.println("Solution not found :(");
+        }
     }
     
 
