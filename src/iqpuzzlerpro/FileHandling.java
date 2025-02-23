@@ -46,7 +46,7 @@ public class FileHandling {
             // blocks input ahh variables
             List<List<Integer>> buffer2D = null;
             this.blocks = null;
-            char unique = ' ';
+            char unique = (char)(1);
             int[] yx = new int[2];
             yx[0] = 0;
             yx[1] = -1;
@@ -55,6 +55,9 @@ public class FileHandling {
             // empty declaration, declare in the loop
             this.char_int_corr = null;
             int idx_cic = 0;
+
+            // indentation ahh
+            int indent = 0;
 
             // file handling ahh
             int data;
@@ -127,9 +130,18 @@ public class FileHandling {
 
                         buffer2D = new ArrayList<>();
                         buffer2D.add(new ArrayList<>());
+                        for(int i = 0; i < indent; i++){
+                            buffer2D.get(yx[0]).add(0);
+                        }
+                        indent = 0;
                     }
                     if ((char)data == unique){
                         yx[1] += 1;
+
+                        for(int i = 0; i < indent; i++){
+                            buffer2D.get(yx[0]).add(0);
+                        }
+                        indent = 0;
 
                         buffer2D.get(yx[0]).add(idx_cic);
 
@@ -140,13 +152,14 @@ public class FileHandling {
                     else if (data == 10){
                         yx[0] += 1;
                         yx[1] = -1;
+                        indent = 0;
 
                         buffer2D.add(new ArrayList<>());
                     }
 
                     else if (data == 32){
                         yx[1] += 1;
-                        buffer2D.get(yx[0]).add(0);
+                        indent+=1;
                     }
                 }
             }
@@ -154,7 +167,7 @@ public class FileHandling {
             this.blocks[idx_cic-1].setBlock2D(buffer2D);
 
             // debug print
-            // debugPrint();
+            debugPrint();
 
         }
 
