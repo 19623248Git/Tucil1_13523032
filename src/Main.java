@@ -41,24 +41,6 @@ class Main {
         blocks = FileHandler.getBlocks();
         char_int_corr = FileHandler.getCharIntCorr();
 
-
-
-        board.setBoard2D(nmp[1], nmp[0]);
-
-        boolean used[] = new boolean[blocks.length];
-        for(int i = 0; i < blocks.length; i++){
-            used[i] = false;
-        }
-
-        long startTime = System.nanoTime();
-        long endTime = 0;
-        if(board.solve(blocks, used, 0)){
-            endTime = System.nanoTime();
-            System.out.println("Solution found!");
-            board.printCharCorr(char_int_corr);
-        }
-        long elapsedTime = endTime - startTime;
-        System.out.println("Number of iterations: " + board.getIter()); 
-        System.out.println("Elapsed time: " + elapsedTime / 1_000_000_000.0+ " seconds");
-    } 
+        board.fitSolve(nmp, mode, blocks, char_int_corr);
+    }
 }
