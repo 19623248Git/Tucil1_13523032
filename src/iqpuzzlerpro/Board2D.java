@@ -15,6 +15,7 @@ public class Board2D {
     private int pivotCol = 0;
     private int iter = 0;
     private String mode;
+    private double  elapsedTime = 0;
 
     // Default constructor
     public Board2D(){
@@ -205,6 +206,8 @@ public class Board2D {
             }
             writer.newLine();
             writer.write("Number of iterations: " + getIter());
+            writer.newLine();
+            writer.write("Elapsed time: " + this.elapsedTime + " seconds");
             System.out.println("Output file has been created!");
         } 
         catch (IOException e) {
@@ -387,9 +390,9 @@ public class Board2D {
             endTime = System.nanoTime();
             System.out.println("Solution found!");
             printCharCorr(char_int_corr);
-            long elapsedTime = endTime - startTime;
+            this.elapsedTime = (endTime - startTime) / 1_000_000_000.0;
             System.out.println("Number of iterations: " + getIter()); 
-            System.out.println("Elapsed time: " + elapsedTime / 1_000_000_000.0+ " seconds");
+            System.out.println("Elapsed time: " + this.elapsedTime + " seconds");
             outFile(char_int_corr);
         }
         else{
