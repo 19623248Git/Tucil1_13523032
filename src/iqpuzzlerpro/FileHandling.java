@@ -30,20 +30,20 @@ public class FileHandling {
 
     public void inputPath(){
         String currentDir = System.getProperty("user.dir");
-        System.out.println("Current directory: " + currentDir);
+        System.out.println("\nCurrent directory: " + currentDir);
         String expectedDir = currentDir + "/test/[dir_name]/input.txt";
         System.out.println("\nExpected directory: " + expectedDir);
         
         try (Scanner myObj = new Scanner(System.in)) {
-            System.out.print("Input dir_name: ");
+            System.out.print("\nInput dir_name: ");
             String dir_name = myObj.nextLine();
             this.path = currentDir + "/test/" + dir_name;
             File f = new File(this.path);
             if (f.exists()){
-                System.out.println("Input Directory Exists!");
+                System.out.println("\nInput Directory Exists!");
             }
             else{
-                System.out.println(this.path + "Doesn't Directory Exists!");
+                System.out.println("\n"  +  this.path + "Doesn't Directory Exists!");
             }
         }
     }
@@ -110,7 +110,7 @@ public class FileHandling {
                         nmp_itr++;
 
                         if (nmp_itr != 3 && data == 10){
-                            System.err.println("Hey only three funny numbers at the beginning please >:(");
+                            System.err.println("Only three numbers at the beginning of the file");
                             return;
                         }
                     }
@@ -195,7 +195,7 @@ public class FileHandling {
             this.blocks[idx_cic-1].setBlock2D(buffer2D);
 
             // debug print
-            // debugPrint();
+            // debugPrint();    
 
         }
 

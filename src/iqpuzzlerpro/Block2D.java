@@ -152,5 +152,25 @@ public class Block2D {
         this.block = copyBlock;
 
     }
+
+    public Block2D[] getOrientations(){
+
+        Block2D[] block_orientations = new Block2D[8];
+    
+        for (int k = 0; k < 8; k++) {
+            block_orientations[k] = new Block2D();
+        }
+
+        for (int k = 0; k < 8; k+=2) {
+            block_orientations[k].setBlock2D(getBlock2D());
+            Block2D temp = new Block2D();
+            temp.setBlock2D(getBlock2D());
+            temp.flipH();
+            block_orientations[k+1].setBlock2D(temp.getBlock2D());
+            rotateCTR();
+        }
+
+        return block_orientations;
+    }
     
 }

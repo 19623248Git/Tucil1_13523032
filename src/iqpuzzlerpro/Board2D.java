@@ -13,7 +13,7 @@ public class Board2D {
     private int height;
     private int pivotRow = 0;
     private int pivotCol = 0;
-    private int iter = 0;
+    private long iter = 0;
     private String mode;
     private double  elapsedTime = 0;
     private String outPath;
@@ -92,7 +92,7 @@ public class Board2D {
         return this.board;
     }
     
-    public int getIter(){
+    public long getIter(){
         return this.iter;
     }
 
@@ -297,18 +297,27 @@ public class Board2D {
     }
 
     // Solve the board with collection of block
+    // Deprecated Function
     public boolean solve(Block2D[] block, boolean[] used, int blockCount) {
+
+        // if(this.iter%1000000 == 0){
+        //     prettierPrintBoard2D();
+        // }
 
         // prettierPrintBoard2D();
     
         // Solved condition
         if (blockCount == block.length && isFull()) {
-            return true;
+            return true; 
         }
     
         if (blockCount > block.length) {
             return false;
         }
+
+        // for(int p = 0; p < used.length; p++){
+        //     System.out.print(used[p]);
+        // }
     
         for (int blockIndex = 0; blockIndex < block.length; blockIndex++) {
             if (used[blockIndex]) continue; // Skip used blocks
@@ -342,14 +351,20 @@ public class Board2D {
             }
 
             findCorner();
+            // System.out.println("Corner found: " + this.pivotRow + ", " + this.pivotCol);
+
+            int pR = this.pivotRow;
+            int pC = this.pivotCol;
     
-            for (int i = this.pivotRow; i < this.height; i++) {
-                for (int j = this.pivotCol; j < this.width; j++) {
+            for (int i = pR; i < this.height; i++) {
+                for (int j = pC; j < this.width; j++) {
                     for (int k = 0; k < block_orientations.length; k++) {
     
                         this.iter += 1;
     
                         if (isFit(block_orientations[k], i, j)) { 
+
+                            // System.out.println("blockIndex: " + blockIndex + ", isFit(block_orientations[k], i, j): " + isFit(block_orientations[k], i, j) + ", " + i + " " + j + " " + block_orientations[k].getBlock2D().get(0).get(0));
                             
                             // System.out.println("Before: ");
                             // prettierPrintBoard2D();
@@ -358,17 +373,70 @@ public class Board2D {
                             placeBlock(block_orientations[k], i, j);
                             // System.out.println("After: ");
                             // prettierPrintBoard2D();
-                            used[blockIndex] = true; // Mark block as used
+                            // System.out.println("");
+                            used[blockIndex] = true;
     
                             if (solve(block, used, blockCount + 1)) {
                                 return true;
                             }
     
                             removeBlock(block_orientations[k], i, j);
-                            used[blockIndex] = false; // Unmark block after backtracking
+                            used[blockIndex] = false;
                         }
                     }
                 }
+                if(pC!=0){
+                    pC = 0;
+                }
+            }
+        }
+    
+        return false;
+    }
+
+    // Solve the board with collection of block with defined orientations
+    public boolean betterSolve(Block2D[][] block, boolean[] used, int blockCount) {
+    
+        // Solved condition
+        if (blockCount == block.length && isFull()) {
+            return true; 
+        }
+    
+        if (blockCount > block.length) {
+            return false;
+        }
+
+        findCorner();
+
+        int pR = this.pivotRow;
+        int pC = this.pivotCol;
+
+        for (int i = pR; i < this.height; i++) {
+            for (int j = pC; j < this.width; j++) {
+                for(int k = 0; k < block.length; k++){
+                    for(int p = 0; p < block[0].length; p++){
+                        
+                        if(used[k]) continue;
+
+                        this.iter += 1;
+
+                        if (isFit(block[k][p], i, j)) { 
+
+                            placeBlock(block[k][p], i, j);
+                            used[k] = true;
+
+                            if (betterSolve(block, used, blockCount + 1)) {
+                                return true;
+                            }
+
+                            removeBlock(block[k][p], i, j);
+                            used[k] = false;
+                        }
+                    }
+                }
+            }
+            if(pC!=0){
+                pC = 0;
             }
         }
     
@@ -383,23 +451,33 @@ public class Board2D {
         fit(nmp, mode);
         
         boolean used[] = new boolean[blocks.length];
+        Block2D[][] block_w_orients = new Block2D[blocks.length][8]; 
+
         for(int i = 0; i < blocks.length; i++){
             used[i] = false;
+            block_w_orients[i] = blocks[i].getOrientations();
         }
 
         long startTime = System.nanoTime();
-        long endTime = 0;
-        if(solve(blocks, used, 0)){
+        long endTime;
+
+        // depecrated mode
+        // if(solve(blocks, used, 0))
+
+        if(betterSolve(block_w_orients, used, pivotCol)){
             endTime = System.nanoTime();
+            this.elapsedTime = (endTime - startTime) / 1_000_000_000.0;
             System.out.println("Solution found!");
             printCharCorr(char_int_corr);
-            this.elapsedTime = (endTime - startTime) / 1_000_000_000.0;
             System.out.println("Number of iterations: " + getIter()); 
             System.out.println("Elapsed time: " + this.elapsedTime + " seconds");
             outFile(char_int_corr);
         }
         else{
             System.out.println("Solution not found :(");
+            endTime = System.nanoTime();
+            this.elapsedTime = (endTime - startTime) / 1_000_000_000.0;
+            System.out.println("Elapsed time: " + this.elapsedTime + " seconds");
         }
     }
     
