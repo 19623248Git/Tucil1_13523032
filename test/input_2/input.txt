@@ -1,4 +1,4 @@
-5 5 4
+5 10 8
 DEFAULT
 AA
 AA
@@ -10,3 +10,13 @@ CC
 DDD
 DDD
 DDD
+EE
+EE
+FFF
+FFF
+GG
+GG
+GG
+HHH
+HHH
+HHH
