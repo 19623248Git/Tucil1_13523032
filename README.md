@@ -7,6 +7,18 @@ The algorithm implemented is a **bruteforce algorithm with recursive backtrackin
 
 ### Compile and Run Program
 
+Ensure the version of java is 21.0.6 or above
+
+```bash
+# check java interpreter
+$ java -version
+openjdk version "21.0.6" 2025-01-21
+
+# check java compiler
+$ javac -version
+javac 21.0.6
+```
+
 Clone the project
 
 ```bash
